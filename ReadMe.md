@@ -1,4 +1,4 @@
-# EternalBlue exploit originally written by OffensiveSecurity?
+# EternalBlue exploit originally written by sleepya?
 
 Modified by Leon Mailfert.
  - Refactored the exploit to work in Python3
